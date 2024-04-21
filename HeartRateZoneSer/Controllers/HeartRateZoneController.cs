@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HeartRateZoneSer.Workers;
-using System.Net;
 using HeartRateZoneSer.Domain;
+using System.Collections.Generic;
 
 namespace HeartRateZoneSer.Controllers
 {
@@ -19,8 +19,8 @@ namespace HeartRateZoneSer.Controllers
         [HttpGet("consumed-messages/count")]
         public IActionResult GetConsumedMessagesCount()
         {
-            int count = _worker.GetConsumedDataCount();
-            return Ok(count);
+            Dictionary<Guid, int> deviceQuantities = _worker.GetConsumedDataCount();
+            return Ok(deviceQuantities);
         }
 
         [HttpGet("GetLatestMessage")]
@@ -43,6 +43,30 @@ namespace HeartRateZoneSer.Controllers
         public IActionResult GetMessages()
         {
             var messages = _worker.GetAllMessages();
+            return Ok(messages);
+        }
+
+
+        [HttpGet("GetLatestdeviceIDquantity")]
+        [ProducesResponseType(typeof(Biometrics), 200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetLatestdeviceIDquantity()
+        {
+            var latestMessage = _worker.GetLatestdeviceIDquantity();
+
+            if (latestMessage == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(latestMessage);
+        }
+
+        [HttpGet("GetalldeviceIDsquantities")]
+        [ProducesResponseType(typeof(Biometrics[]), 200)]
+        public IActionResult GetalldeviceIDsquantities()
+        {
+            var messages = _worker.GetalldeviceIDsquantities();
             return Ok(messages);
         }
     }
