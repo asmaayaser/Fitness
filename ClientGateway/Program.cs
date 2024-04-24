@@ -76,7 +76,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+// Use CORS middleware
+app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
