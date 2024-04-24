@@ -45,28 +45,39 @@ builder.Services.AddSingleton<ISchemaRegistryClient>(sp =>
     var config = sp.GetRequiredService<SchemaRegistryConfig>();
     return new CachedSchemaRegistryClient(config);
 });
+//builder.Services.AddCors(corsOptions =>
+//{
+//    corsOptions.AddPolicy("MyPolicy", CorsPolicyBuilder =>
+//    {
+//        // certain one
+//        //CorsPolicyBuilder.WithOrigins("http://www.face.com");
+
+//        // anyone have url  i can response to him
+//        //CorsPolicyBuilder.AllowAnyOrigin();
+
+//        //with certain meyhods 
+//        // get , post   --put them in array of string  and replace
+//        //CorsPolicyBuilder.AllowAnyOrigin().WithMethods("Get");
+
+//        // any method 
+//        //CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod();
+
+//        // don’t  need a certain header
+//        // anyone can access
+//        CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+
+//    });
+//});
+
+// Configure CORS policy
 builder.Services.AddCors(corsOptions =>
 {
-    corsOptions.AddPolicy("MyPolicy", CorsPolicyBuilder =>
+    corsOptions.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        // certain one
-        //CorsPolicyBuilder.WithOrigins("http://www.face.com");
-
-        // anyone have url  i can response to him
-        //CorsPolicyBuilder.AllowAnyOrigin();
-
-        //with certain meyhods 
-        // get , post   --put them in array of string  and replace
-        //CorsPolicyBuilder.AllowAnyOrigin().WithMethods("Get");
-
-        // any method 
-        //CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod();
-
-        // don’t  need a certain header
-        // anyone can access
-        CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-
-
+        builder.WithOrigins("http://localhost:3000") // Allow requests from this origin
+               .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, etc.)
+               .AllowAnyHeader(); // Allow any HTTP header
     });
 });
 var app = builder.Build();
@@ -77,7 +88,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 // Use CORS middleware
-app.UseCors();
+app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();
 
 app.MapControllers();
