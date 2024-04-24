@@ -33,6 +33,7 @@ builder.Services.AddSingleton<IProducer<string, Biometrics>>(sp =>
         .Build();
 });
 
+
 // Load SchemaRegistry section of the config into a SchemaRegistryConfig object
 var schemaRegistryConfig = new SchemaRegistryConfig();
 builder.Configuration.GetSection("SchemaRegistry").Bind(schemaRegistryConfig);
@@ -44,7 +45,30 @@ builder.Services.AddSingleton<ISchemaRegistryClient>(sp =>
     var config = sp.GetRequiredService<SchemaRegistryConfig>();
     return new CachedSchemaRegistryClient(config);
 });
+builder.Services.AddCors(corsOptions =>
+{
+    corsOptions.AddPolicy("MyPolicy", CorsPolicyBuilder =>
+    {
+        // certain one
+        //CorsPolicyBuilder.WithOrigins("http://www.face.com");
 
+        // anyone have url  i can response to him
+        //CorsPolicyBuilder.AllowAnyOrigin();
+
+        //with certain meyhods 
+        // get , post   --put them in array of string  and replace
+        //CorsPolicyBuilder.AllowAnyOrigin().WithMethods("Get");
+
+        // any method 
+        //CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod();
+
+        // don’t  need a certain header
+        // anyone can access
+        CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+
+    });
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

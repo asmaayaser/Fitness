@@ -66,6 +66,30 @@ namespace HeartRateZoneSer
 
                 return consumerBuilder.Build();
             });
+            builder.Services.AddCors(corsOptions =>
+            {
+                corsOptions.AddPolicy("MyPolicy", CorsPolicyBuilder =>
+                {
+                    // certain one
+                    //CorsPolicyBuilder.WithOrigins("http://www.face.com");
+
+                    // anyone have url  i can response to him
+                    //CorsPolicyBuilder.AllowAnyOrigin();
+
+                    //with certain meyhods 
+                    // get , post   --put them in array of string  and replace
+                    //CorsPolicyBuilder.AllowAnyOrigin().WithMethods("Get");
+
+                    // any method 
+                    //CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod();
+
+                    // don’t  need a certain header
+                    // anyone can access
+                    CorsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+
+                });
+            });
             // Register HeartRateZoneWorker service
             builder.Services.AddSingleton<HeartRateZoneWorker>();
 
