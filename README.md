@@ -1,7 +1,5 @@
 # Building Event Streaming Applications in .Net
 
-This application is designed to be used in conjunction with the Confluent Developer course.
-
 ## Compile
 
 To compile your code, execute the following:
